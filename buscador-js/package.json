@@ -1,0 +1,19 @@
+{
+  "name": "buscador-js",
+  "version": "1.0.0",
+  "description": "Parte A de la Tarea 2: buscador de libros con JavaScript, Bootstrap y Sass",
+  "private": true,
+  "scripts": {
+    "sass": "sass --load-path=node_modules --quiet-deps --silence-deprecation=import scss/main.scss css/main.css",
+    "sass:watch": "sass --watch --load-path=node_modules --quiet-deps --silence-deprecation=import scss/main.scss css/main.css",
+    "prestart": "npm run sass",
+    "start": "serve . -l 3000"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.8"
+  },
+  "devDependencies": {
+    "saas": "^1.0.0",
+    "serve": "^10.1.2"
+  }
+}

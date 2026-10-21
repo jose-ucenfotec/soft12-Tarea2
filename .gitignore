@@ -1,0 +1,10 @@
+# Dependencias
+node_modules/
+
+# Archivos generados
+buscador-js/css/
+dist/
+
+# Sistema y editor
+.DS_Store
+.vscode/
