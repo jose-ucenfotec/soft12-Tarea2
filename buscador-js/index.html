@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Estantería Común | Buscador de libros</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <!-- Barra de navegación -->
+  <nav class="navbar navbar-expand-md navbar-dark bg-primary sticky-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="#">Estantería Común</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu"
+        aria-controls="menu" aria-expanded="false" aria-label="Abrir menú">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="menu">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#buscar">Buscar</a></li>
+          <li class="nav-item"><a class="nav-link" href="#mi-lista">Mi lista</a></li>
+          <li class="nav-item"><a class="nav-link" href="#proponer">Proponer lectura</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container py-4">
+    <div class="row g-4">
+      <!-- Columna principal: buscador y resultados -->
+      <section id="buscar" class="col-12 col-lg-8">
+        <h1 class="h3 mb-3">Buscar libros</h1>
+
+        <form id="form-busqueda" class="row g-2 mb-3" role="search">
+          <div class="col-12 col-sm-9">
+            <label for="texto-busqueda" class="visually-hidden">Título o autor</label>
+            <input type="search" id="texto-busqueda" class="form-control" placeholder="Título o autor"
+              required minlength="2">
+          </div>
+          <div class="col-12 col-sm-3 d-grid">
+            <button type="submit" class="btn btn-primary">Buscar</button>
+          </div>
+        </form>
+
+        <div id="estado-busqueda" aria-live="polite"></div>
+
+        <div id="resultados" class="estante"></div>
+      </section>
+
+      <!-- Columna lateral: lista de lecturas -->
+      <aside id="mi-lista" class="col-12 col-lg-4">
+        <div class="card">
+          <div class="card-header bg-white">
+            <h2 class="h5 mb-0">Mi lista de lecturas</h2>
+          </div>
+          <div class="card-body p-0">
+            <div id="aviso-lista" class="px-3 pt-3" aria-live="polite"></div>
+            <div class="table-responsive">
+              <table class="table table-hover align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th scope="col">Libro</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col" class="text-end">Acciones</th>
+                  </tr>
+                </thead>
+                <tbody id="tabla-lecturas"></tbody>
+              </table>
+            </div>
+            <p id="lista-vacia" class="text-muted small p-3 mb-0">Todavía no agregaste libros.</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Formulario de propuesta -->
+    <section id="proponer" class="mt-5">
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-xl-8">
+          <div class="card">
+            <div class="card-body p-4">
+              <h2 class="h4 mb-3">Proponer un libro para la próxima sesión</h2>
+
+              <div id="alerta-propuesta" aria-live="polite"></div>
+
+              <form id="form-propuesta" novalidate>
+                <div class="row g-3">
+                  <div class="col-12">
+                    <label for="titulo" class="form-label">Título</label>
+                    <input type="text" id="titulo" name="titulo" class="form-control" required minlength="2"
+                      maxlength="120">
+                    <div class="invalid-feedback"></div>
+                  </div>
+
+                  <div class="col-12">
+                    <label class="form-label">Autores</label>
+                    <div id="lista-autores">
+                      <div class="input-group has-validation mb-2 campo-autor">
+                        <input type="text" name="autor" class="form-control" placeholder="Nombre del autor"
+                          aria-label="Autor" required minlength="3" maxlength="80"
+                          pattern="[A-Za-zÁÉÍÓÚáéíóúÑñÜü.' \-]+">
+                        <button type="button" class="btn btn-outline-danger" data-accion="quitar-autor"
+                          aria-label="Quitar autor">&times;</button>
+                        <div class="invalid-feedback"></div>
+                      </div>
+                    </div>
+                    <button type="button" id="agregar-autor" class="btn btn-sm btn-outline-primary">+ Agregar
+                      autor</button>
+                    <small class="text-muted ms-2">Mínimo 1, máximo 5.</small>
+                  </div>
+
+                  <div class="col-12 col-sm-6 col-md-4">
+                    <label for="anio" class="form-label">Año de publicación</label>
+                    <input type="number" id="anio" name="anio" class="form-control" required min="1450" step="1">
+                    <div class="invalid-feedback"></div>
+                  </div>
+
+                  <div class="col-12 col-sm-6 col-md-4">
+                    <label for="paginas" class="form-label">Cantidad de páginas</label>
+                    <input type="number" id="paginas" name="paginas" class="form-control" required min="10"
+                      max="3000" step="1">
+                    <div class="invalid-feedback"></div>
+                  </div>
+
+                  <div class="col-12 col-md-4">
+                    <label for="genero" class="form-label">Género</label>
+                    <select id="genero" name="genero" class="form-select" required>
+                      <option value="">Elija uno...</option>
+                      <option>Novela</option>
+                      <option>Cuento</option>
+                      <option>Poesía</option>
+                      <option>Ensayo</option>
+                      <option>Ciencia ficción</option>
+                      <option>Fantasía</option>
+                      <option>Historia</option>
+                    </select>
+                    <div class="invalid-feedback"></div>
+                  </div>
+
+                  <div class="col-12 col-md-6">
+                    <label for="correo" class="form-label">Correo de quien propone</label>
+                    <input type="email" id="correo" name="correo" class="form-control" required
+                      placeholder="nombre@correo.com">
+                    <div class="invalid-feedback"></div>
+                  </div>
+
+                  <div class="col-12 col-md-6">
+                    <label for="fecha" class="form-label">Fecha propuesta para la sesión</label>
+                    <input type="date" id="fecha" name="fecha" class="form-control" required>
+                    <div class="invalid-feedback"></div>
+                  </div>
+
+                  <div class="col-12">
+                    <label for="motivo" class="form-label">Motivo de la propuesta</label>
+                    <textarea id="motivo" name="motivo" class="form-control" rows="3" required minlength="20"
+                      maxlength="500"></textarea>
+                    <div class="invalid-feedback"></div>
+                  </div>
+
+                  <div class="col-12 d-grid d-sm-flex justify-content-sm-end">
+                    <button type="submit" id="boton-enviar" class="btn btn-primary px-4">Enviar propuesta</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal de detalle del libro -->
+  <div class="modal fade" id="modal-detalle" tabindex="-1" aria-labelledby="detalle-titulo" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title h5" id="detalle-titulo"></h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-12 col-sm-5 text-center">
+              <img id="detalle-portada" class="img-fluid detalle-portada" src="img/sin-portada.svg" alt="">
+            </div>
+            <div class="col-12 col-sm-7">
+              <dl class="mb-0" id="detalle-datos"></dl>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

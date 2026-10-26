@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180" height="270" viewBox="0 0 180 270">
+  <rect width="180" height="270" rx="8" fill="#e9e4dc"/>
+  <rect x="30" y="60" width="120" height="150" rx="4" fill="none" stroke="#2f5d50" stroke-width="4"/>
+  <line x1="50" y1="100" x2="130" y2="100" stroke="#2f5d50" stroke-width="4"/>
+  <line x1="50" y1="125" x2="130" y2="125" stroke="#2f5d50" stroke-width="4"/>
+  <line x1="50" y1="150" x2="100" y2="150" stroke="#2f5d50" stroke-width="4"/>
+  <text x="90" y="245" font-family="Arial, sans-serif" font-size="16" fill="#2f5d50" text-anchor="middle">Sin portada</text>
+</svg>
