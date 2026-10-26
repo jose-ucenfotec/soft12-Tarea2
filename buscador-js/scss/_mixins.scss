@@ -1,0 +1,18 @@
+@use "sass:math";
+@use "sass:map";
+
+// Convierte píxeles a rem tomando 16px como base.
+@function a-rem($px) {
+  @return math.div($px, 16px) * 1rem;
+}
+
+// Media query mobile-first: los estilos aplican desde ese punto de corte hacia arriba.
+@mixin desde($punto) {
+  @media (min-width: map.get($grid-breakpoints, $punto)) {
+    @content;
+  }
+}
+
+@mixin sombra-suave {
+  box-shadow: 0 a-rem(4px) a-rem(12px) rgba(0, 0, 0, .08);
+}
