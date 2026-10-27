@@ -1,0 +1,70 @@
+// Componente propio: el "estante" donde se acomodan los resultados. Monile first
+.estante {
+  --columnas: 1;
+  --separacion: #{a-rem($espacio-base)};
+
+  display: grid;
+  grid-template-columns: repeat(var(--columnas), minmax(0, 1fr));
+  gap: var(--separacion);
+
+  @include desde(sm) {
+    --columnas: 2;
+  }
+
+  @include desde(lg) {
+    --columnas: 3;
+    --separacion: #{a-rem($espacio-base * 1.5)};
+  }
+
+  @include desde(xxl) {
+    --columnas: 4;
+  }
+}
+
+// Tarjeta de cada libro dentro del estante
+.libro {
+  transition: transform $duracion-animacion ease;
+
+  &:hover {
+    transform: translateY(-0.25rem);
+    @include sombra-suave;
+  }
+
+  &__portada {
+    height: a-rem($alto-portada);
+    object-fit: contain;
+    background-color: $light;
+    padding: .5rem;
+  }
+
+  &__titulo {
+    font-size: 1rem;
+    margin-bottom: .25rem;
+  }
+
+  &__autores {
+    font-size: .875rem;
+    color: $secondary;
+  }
+}
+
+// Colores de cada estado de lectura
+.estado {
+  &--pendiente {
+    background-color: $warning;
+    color: $dark;
+  }
+
+  &--leyendo {
+    background-color: $primary;
+  }
+
+  &--leido {
+    background-color: $success;
+  }
+}
+
+.detalle-portada {
+  max-height: a-rem(320px);
+  object-fit: contain;
+}
