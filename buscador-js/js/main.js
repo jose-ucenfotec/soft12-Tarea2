@@ -1,5 +1,5 @@
 import { buscarLibros } from './api.js';
-import { mostrarResultados, mostrarEstado } from './render.js';
+import { mostrarResultados, mostrarEstado, rellenarDetalle } from './render.js';
 
 const formBusqueda = document.getElementById('form-busqueda');
 const textoBusqueda = document.getElementById('texto-busqueda');
@@ -37,4 +37,21 @@ formBusqueda.addEventListener('submit', async (evento) => {
     mostrarEstado(estadoBusqueda, 'error', 'No se pudo conectar con Open Library. Intente de nuevo en un momento.');
     console.warn('Error en la búsqueda:', error.message);
   }
+});
+
+// ---------- Detalle ----------
+
+function buscarPorId(id) {
+  return librosEncontrados.find((libro) => libro.id === id);
+}
+
+// Bootstrap avisa con show.bs.modal antes de abrir; relatedTarget es la tarjeta que se tocó
+document.getElementById('modal-detalle').addEventListener('show.bs.modal', (evento) => {
+  rellenarDetalle(buscarPorId(evento.relatedTarget.dataset.id));
+});
+
+// Al cerrar, Bootstrap pone aria-hidden en el modal. Si el botón de cerrar sigue con el foco
+// la consola muestra un aviso de accesibilidad, así que se quita el foco antes.
+document.getElementById('modal-detalle').addEventListener('hide.bs.modal', () => {
+  document.activeElement.blur();
 });
