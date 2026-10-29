@@ -95,3 +95,44 @@ export function rellenarDetalle(libro) {
     lista.append(crear('dt', '', nombre), crear('dd', '', String(valor)));
   });
 }
+
+// ---------- Lista de lecturas ----------
+
+function claseEstado(estado) {
+  // 'Leído' -> 'estado--leido'
+  const nombre = estado.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+  return `badge estado estado--${nombre}`;
+}
+
+export function crearFilaLectura(lectura) {
+  const fila = crear('tr', 'fila-lectura');
+  fila.dataset.id = lectura.id;
+
+  const celdaLibro = crear('td');
+  celdaLibro.append(
+    crear('div', 'fw-semibold', lectura.titulo),
+    crear('div', 'small text-muted', lectura.autores[0])
+  );
+
+  const celdaEstado = crear('td');
+  celdaEstado.append(crear('span', claseEstado(lectura.estado), lectura.estado));
+
+  const celdaAcciones = crear('td', 'text-end text-nowrap');
+  const cambiar = crear('button', 'btn btn-sm btn-outline-primary me-1', 'Cambiar estado');
+  cambiar.type = 'button';
+  cambiar.dataset.accion = 'cambiar-estado';
+  const quitar = crear('button', 'btn btn-sm btn-outline-danger', 'Quitar');
+  quitar.type = 'button';
+  quitar.dataset.accion = 'quitar';
+  celdaAcciones.append(cambiar, quitar);
+
+  fila.append(celdaLibro, celdaEstado, celdaAcciones);
+  return fila;
+}
+
+// Solo se toca la etiqueta de esa fila, no se vuelve a dibujar la tabla
+export function actualizarEstadoFila(fila, lectura) {
+  const etiqueta = fila.querySelector('.estado');
+  etiqueta.className = claseEstado(lectura.estado);
+  etiqueta.textContent = lectura.estado;
+}
