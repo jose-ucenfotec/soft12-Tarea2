@@ -26,9 +26,7 @@ function crearPortada(libro, clases) {
 function crearTarjetaLibro(libro) {
   const tarjeta = crear('article', 'card h-100 libro');
   tarjeta.dataset.id = libro.id;
-// Bootstrap abre el modal solo con estos atributos
-  tarjeta.dataset.bsToggle = 'modal';
-  tarjeta.dataset.bsTarget = '#modal-detalle';
+  tarjeta.dataset.detalle = ''; // marca que al hacer clic se abre el detalle
 
   const cuerpo = crear('div', 'card-body d-flex flex-column');
   const titulo = crear('h3', 'card-title libro__titulo', libro.titulo);
@@ -75,7 +73,7 @@ export function crearAlerta(color, mensaje) {
 }
 
 // Rellena el modal; Bootstrap se encarga de abrirlo
-export function rellenarDetalle(libro) {
+export function mostrarDetalle(libro) {
   document.getElementById('detalle-titulo').textContent = libro.titulo;
 
   const portada = document.getElementById('detalle-portada');
@@ -94,6 +92,8 @@ export function rellenarDetalle(libro) {
   datos.forEach(([nombre, valor]) => {
     lista.append(crear('dt', '', nombre), crear('dd', '', String(valor)));
   });
+
+  bootstrap.Modal.getOrCreateInstance(document.getElementById('modal-detalle')).show();
 }
 
 // ---------- Lista de lecturas ----------
@@ -107,6 +107,7 @@ function claseEstado(estado) {
 export function crearFilaLectura(lectura) {
   const fila = crear('tr', 'fila-lectura');
   fila.dataset.id = lectura.id;
+  fila.dataset.detalle = '';
 
   const celdaLibro = crear('td');
   celdaLibro.append(

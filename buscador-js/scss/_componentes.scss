@@ -21,8 +21,10 @@
   }
 }
 
-// Tarjeta de cada libro dentro del estante
-.libro {
+// Cualquier elemento que abre el detalle del libro
+[data-detalle] {
+  cursor: pointer;
+}
   transition: transform $duracion-animacion ease;
 
   &:hover {

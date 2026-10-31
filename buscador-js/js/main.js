@@ -1,7 +1,7 @@
 import { buscarLibros } from './api.js';
-import { agregarLectura, siguienteEstado, quitarLectura, cantidadLecturas } from './lista.js';
+import { agregarLectura, obtenerLectura, siguienteEstado, quitarLectura, cantidadLecturas } from './lista.js';
 import {
-  mostrarResultados, mostrarEstado, rellenarDetalle, crearAlerta,
+  mostrarResultados, mostrarEstado, mostrarDetalle, crearAlerta,
   crearFilaLectura, actualizarEstadoFila
 } from './render.js';
 
@@ -12,6 +12,7 @@ const resultados = document.getElementById('resultados');
 const tablaLecturas = document.getElementById('tabla-lecturas');
 const listaVacia = document.getElementById('lista-vacia');
 const avisoLista = document.getElementById('aviso-lista');
+const contenido = document.querySelector('main');
 
 // Libros de la última búsqueda, para encontrarlos por id cuando se hace clic en una tarjeta
 let librosEncontrados = [];
@@ -46,15 +47,20 @@ formBusqueda.addEventListener('submit', async (evento) => {
   }
 });
 
-// ---------- Detalle ----------
+//  Detalle 
 
 function buscarPorId(id) {
   return librosEncontrados.find((libro) => libro.id === id);
 }
 
-// Bootstrap avisa con show.bs.modal antes de abrir; relatedTarget es la tarjeta que se tocó
-document.getElementById('modal-detalle').addEventListener('show.bs.modal', (evento) => {
-  rellenarDetalle(buscarPorId(evento.relatedTarget.dataset.id));
+// Una sola escucha abre el detalle de cualquier elemento marcado con data-detalle:
+// las tarjetas de resultados y las filas de la lista de lecturas.
+contenido.addEventListener('click', (evento) => {
+  const elemento = evento.target.closest('[data-detalle]');
+  if (!elemento) return;
+
+  const id = elemento.dataset.id;
+  mostrarDetalle(obtenerLectura(id) ?? buscarPorId(id));
 });
 
 // Al cerrar, Bootstrap pone aria-hidden en el modal. Si el botón de cerrar sigue con el foco
@@ -101,6 +107,9 @@ function agregarALista(libro) {
 tablaLecturas.addEventListener('click', (evento) => {
   const boton = evento.target.closest('button[data-accion]');
   if (!boton) return;
+
+  // Igual que en las tarjetas: la fila abre el detalle, pero los botones no deben hacerlo
+  evento.stopPropagation();
 
   const fila = boton.closest('tr');
   const id = fila.dataset.id;
