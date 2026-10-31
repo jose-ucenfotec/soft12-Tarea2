@@ -3,3 +3,15 @@
 @import "bootstrap/scss/bootstrap";
 @import "../../../buscador-js/scss/mixins";
 @import "../../../buscador-js/scss/componentes";
+
+
+// Propio del tablero
+.resumen {
+  &__boton {
+    min-width: 6rem;
+
+    &.activo {
+      outline: .2rem solid $primary;
+    }
+  }
+}
