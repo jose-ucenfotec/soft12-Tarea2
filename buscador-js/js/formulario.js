@@ -1,11 +1,16 @@
 // Formulario de propuesta de lectura
 
+import { enviarPropuesta } from './api.js';
+import { crearAlerta } from './render.js';
+
 const MIN_AUTORES = 1;
 const MAX_AUTORES = 5;
 
 const formulario = document.getElementById('form-propuesta');
 const listaAutores = document.getElementById('lista-autores');
 const botonAgregarAutor = document.getElementById('agregar-autor');
+const botonEnviar = document.getElementById('boton-enviar');
+const alerta = document.getElementById('alerta-propuesta');
 
 // Fecha de hoy en formato yyyy-mm-dd usando la hora local
 function hoyComoTexto() {
@@ -99,15 +104,56 @@ function quitarCampoAutor(boton) {
 
 // ---------- Envío ----------
 
-function manejarEnvio(evento) {
+function leerDatos() {
+  const datos = new FormData(formulario);
+  return {
+    titulo: datos.get('titulo').trim(),
+    // getAll trae todos los inputs name="autor", incluidos los que se agregaron después
+    autores: datos.getAll('autor').map((autor) => autor.trim()),
+    anio: Number(datos.get('anio')),
+    paginas: Number(datos.get('paginas')),
+    genero: datos.get('genero'),
+    correo: datos.get('correo').trim(),
+    fecha: datos.get('fecha'),
+    motivo: datos.get('motivo').trim()
+  };
+}
+
+function reiniciarFormulario() {
+  formulario.reset();
+  // Dejo un solo campo de autor y limpio las marcas de validación
+  camposAutor().forEach((campo, i) => {
+    if (i > 0) campo.remove();
+  });
+  formulario.querySelectorAll('.is-valid, .is-invalid').forEach((campo) => {
+    campo.classList.remove('is-valid', 'is-invalid');
+  });
+  actualizarBotonesAutor();
+}
+
+async function manejarEnvio(evento) {
   evento.preventDefault();
+  alerta.replaceChildren();
 
   if (!validarFormulario()) {
     formulario.querySelector('.is-invalid').focus();
     return;
   }
 
-  console.log('Formulario válido');
+  botonEnviar.disabled = true;
+  botonEnviar.textContent = 'Enviando...';
+
+  try {
+    const respuesta = await enviarPropuesta(leerDatos());
+    alerta.replaceChildren(crearAlerta('alert-success', `¡Gracias! Su propuesta quedó registrada con el número ${respuesta.id}.`));
+    reiniciarFormulario();
+  } catch (error) {
+    alerta.replaceChildren(crearAlerta('alert-danger', 'No se pudo enviar la propuesta. Revise su conexión e intente de nuevo.'));
+    console.warn('Error al enviar la propuesta:', error.message);
+  } finally {
+    botonEnviar.disabled = false;
+    botonEnviar.textContent = 'Enviar propuesta';
+  }
 }
 
 export function iniciarFormulario() {

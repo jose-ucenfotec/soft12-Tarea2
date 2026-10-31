@@ -2,6 +2,7 @@
 
 const URL_BUSQUEDA = 'https://openlibrary.org/search.json';
 const URL_PORTADAS = 'https://covers.openlibrary.org/b/id';
+const URL_PROPUESTAS = 'https://jsonplaceholder.typicode.com/posts';
 
 export async function buscarLibros(texto) {
   const url = `${URL_BUSQUEDA}?q=${encodeURIComponent(texto)}&limit=12`;
@@ -27,4 +28,18 @@ function convertirLibro(doc) {
     ediciones: doc.edition_count ?? 0,
     idiomas: doc.language ?? []
   };
+}
+
+export async function enviarPropuesta(propuesta) {
+  const respuesta = await fetch(URL_PROPUESTAS, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(propuesta)
+  });
+
+  if (!respuesta.ok) {
+    throw new Error(`El servidor respondió con estado ${respuesta.status}`);
+  }
+
+  return respuesta.json();
 }
