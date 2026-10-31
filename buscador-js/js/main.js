@@ -2,8 +2,9 @@ import { buscarLibros } from './api.js';
 import { agregarLectura, obtenerLectura, siguienteEstado, quitarLectura, cantidadLecturas } from './lista.js';
 import {
   mostrarResultados, mostrarEstado, mostrarDetalle, crearAlerta,
-  crearFilaLectura, actualizarEstadoFila
+  crearFilaLectura, actualizarEstadoFila, quitarFilaConTransicion
 } from './render.js';
+import { iniciarFormulario } from './formulario.js';
 
 const formBusqueda = document.getElementById('form-busqueda');
 const textoBusqueda = document.getElementById('texto-busqueda');
@@ -120,8 +121,9 @@ tablaLecturas.addEventListener('click', (evento) => {
   }
 
   if (boton.dataset.accion === 'quitar') {
+    boton.disabled = true; // evita un doble clic mientras corre la transición
     quitarLectura(id);
-    fila.remove();
-    actualizarMensajeListaVacia();
+    quitarFilaConTransicion(fila, actualizarMensajeListaVacia);
   }
 });
+iniciarFormulario();

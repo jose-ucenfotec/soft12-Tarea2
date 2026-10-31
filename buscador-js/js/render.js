@@ -105,7 +105,7 @@ function claseEstado(estado) {
 }
 
 export function crearFilaLectura(lectura) {
-  const fila = crear('tr', 'fila-lectura');
+  const fila = crear('tr', 'fila-lectura fila-entrando');
   fila.dataset.id = lectura.id;
   fila.dataset.detalle = '';
 
@@ -128,6 +128,9 @@ export function crearFilaLectura(lectura) {
   celdaAcciones.append(cambiar, quitar);
 
   fila.append(celdaLibro, celdaEstado, celdaAcciones);
+
+  // Se quita la clase al terminar para que la animación pueda repetirse si hiciera falta
+  fila.addEventListener('animationend', () => fila.classList.remove('fila-entrando'), { once: true });
   return fila;
 }
 
@@ -136,4 +139,19 @@ export function actualizarEstadoFila(fila, lectura) {
   const etiqueta = fila.querySelector('.estado');
   etiqueta.className = claseEstado(lectura.estado);
   etiqueta.textContent = lectura.estado;
+
+  etiqueta.classList.add('estado-cambiado');
+  etiqueta.addEventListener('animationend', () => {
+    etiqueta.classList.remove('estado-cambiado');
+  }, { once: true });
+}
+
+
+// Primero corre la transición y cuando termina se saca la fila del DOM
+export function quitarFilaConTransicion(fila, alTerminar) {
+  fila.addEventListener('transitionend', () => {
+    fila.remove();
+    alTerminar();
+  }, { once: true });
+  fila.classList.add('fila-saliendo');
 }

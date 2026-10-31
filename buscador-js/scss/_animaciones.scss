@@ -1,0 +1,47 @@
+// Las animaciones viven aquí en CSS. JavaScript solo pone o quita estas clases.
+
+// Al agregar un libro a la lista
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateX(-1rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.fila-entrando {
+  animation: aparecer $duracion-animacion ease-out;
+}
+
+.fila-lectura {
+  transition: opacity $duracion-animacion ease, transform $duracion-animacion ease;
+}
+
+.fila-saliendo {
+  opacity: 0;
+  transform: translateX(1rem);
+}
+
+// Al cambiar de estado la etiqueta hace un pequeño "salto"
+@keyframes resaltar {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.25);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+.estado-cambiado {
+  display: inline-block;
+  animation: resaltar $duracion-animacion ease;
+}
