@@ -25,6 +25,9 @@
 [data-detalle] {
   cursor: pointer;
 }
+
+// Tarjeta de cada libro dentro del estante
+.libro {
   transition: transform $duracion-animacion ease;
 
   &:hover {
