@@ -5,6 +5,7 @@ import Panel from './components/Panel/Panel.jsx';
 import Filtros from './components/Filtros/Filtros.jsx';
 import Resumen from './components/Resumen/Resumen.jsx';
 import ListaLibros from './components/ListaLibros/ListaLibros.jsx';
+import FormularioLibro from './components/FormularioLibro/FormularioLibro.jsx';
 
 function App() {
   const [libros, setLibros] = useState(librosIniciales);
@@ -34,6 +35,10 @@ function App() {
 
   function quitarLibro(id) {
     setLibros(libros.filter((libro) => libro.id !== id));
+  }
+
+  function agregarLibro(datos) {
+    setLibros([...libros, { ...datos, id: crypto.randomUUID() }]);
   }
   
   function elegirEstado(estado) {
@@ -66,6 +71,12 @@ function App() {
                 onCambiarEstado={cambiarEstado}
                 onQuitar={quitarLibro}
               />
+            </Panel>
+          </div>
+
+          <div className="col-12 col-lg-4">
+            <Panel titulo="Agregar un libro">
+              <FormularioLibro miembros={miembros} onAgregar={agregarLibro} />
             </Panel>
           </div>
         </div>
